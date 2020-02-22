@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
 
 	//read data of the link from the data.txt
 	FILE *fp = NULL;
-	fp = fopen("database.txt", "r");
+	fp = fopen("database_final.txt", "r");
 	struct link ln[10]={0};
 	int i = 0;
 	while(!feof(fp))

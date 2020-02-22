@@ -1,28 +1,43 @@
-1. Tianyi Zhang
-2. 9598110243
+a. Tianyi Zhang
 
-3. I programmed three servers for communiaction. The first main server will send message to database server, which stores some information about some link, to request for the detail about one link, then if this server get reply about some information, it will send that to the calculation server. And finally, the calculation server will calculate the transmission delay and propagation delay.
+b. 9598110243
 
-4. mainServer.c: made an udp socket for main Server and bind it with port 22243, made two udp sockets for database and calculation server. Then read the number of link from keyboard input, and sent it to database to request some information about it with sendto(). Then with recvfrom(), the main Server will receive the reply. If the server get the detail about this link, after sending request to calculation server, the server will receive the delay from calculation server
-   dbServer.c: made an udp socket for database server and bind it with port 23243, made one more socket for communicating with main Server. After receiving the request from main server, it will search the link in the database. If it does find this link, it will send the detail back to main server. If not, it will reply some information to tell main server that no match found.
-    calcServer.c: made an udp socket for calculation Server and bind it with port 24243, made one more socket to communicate with main server. After receiving the request from main server, it will calculate the transmission delay and propagation delay and send them back to main server.
-    
-5. mainServer:
+c. In my project, one client can send requests to the main Server with TCP, and the main Server can communicate with database Server and calculation Server to compute the transmission delay and propagation delay with UDP. Finally, the main Server will send the result to the client wth TCP. In addition, there is one monitor which can display all information about the activities of main Server.
+
+d. client.c: the client can send link id and size which are given as command-line argument to main Server with TCP, and can receive the transmission delay and propagation delay from the main Server.
+   mainServer.c: mainSever will send link id to database Server with UDP to get the details about this link after receiving the request from client. Then if it can't find this link in the file, it will just reply "Receive no match found". Or, it will send the details to the calculation Server with UDP to get the delay, and send the result to the client. In addition, after every event, it will send the information about this event to monitor with TCP.
+   dbServer.c: after receiving the request from main Server, it will search for the link in the database file. If it can't find this link, it will just reply "No match found". Or, it will send all details to the main Server.
+   calcServer.c: after receiving the request from main Server, it will compute the transmission delay and propagation delay according to the link details and size. Then, it will send the result to the main Server.
+   monitor.c: It will build a TCP connection with main Server. Then after every event of main Server, it will receive the information about this event and display it on the screen.
+   
+e. client:
+      send to main Server: "<id> <size>"
+   mainServer:
+      send to client(if found): "<Tt> <Tp>"
+      send to client(if not found): "no"
       send to database server: "<id>"
       send to calculation server: "<size> <capacity> <length> <velocity>"
+      send to monitor:
+         "Main server receives Link <id> and file size <size>MB from client.\n"
+         "Main server sends Link <id> to database server.\n"
+    (if found): "Main server receives information from database server: link capacity <C>Mbps, link length <L>km, and propagation velocity <Vp>km/s.\n"
+    "Main Server send information to calculation server.\n"
+    "Main Server receives information from calculation server.\n"
+    "Main Server send information to client: transmission delay <Tt>ms, propagation delay <Tp>ms, total delay <Tt+Tp>ms.\n\n"
+    (if not found): "Main server receives information from database server: no match found.\n\n"
    databse Server:
       send to main Server(if found): "<id> <capacity> <length> <velocity>"
       send to main Server(if not found): "0 0 0 0"
    calculation server:
       send to main Server: "<transmission delay> <propagation delay>"
-6. no
-7. from Beej's Guide to Network Programming
+
+g. no
+h. from Beej's Guide to Network Programming
+   socket(), bind(), listen(), accept(): for server to wait for communication from clients
+   connect(): for clients to communicate with the server
+   send(), recv(): send and receive message
    sendto(): send message with UDP
    recvfrom(): receive message with UDP
    getaddrinfo():to get the sockaddr
    fprintf(), perror():print error message
-   socket(), bind(): build socket and bind it with some port
    freeaddrinfo(), close(): close connection and release memory
-
-   
-   

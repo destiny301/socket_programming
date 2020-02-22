@@ -1,0 +1,28 @@
+1. Tianyi Zhang
+2. 9598110243
+
+3. I programmed three servers for communiaction. The first main server will send message to database server, which stores some information about some link, to request for the detail about one link, then if this server get reply about some information, it will send that to the calculation server. And finally, the calculation server will calculate the transmission delay and propagation delay.
+
+4. mainServer.c: made an udp socket for main Server and bind it with port 22243, made two udp sockets for database and calculation server. Then read the number of link from keyboard input, and sent it to database to request some information about it with sendto(). Then with recvfrom(), the main Server will receive the reply. If the server get the detail about this link, after sending request to calculation server, the server will receive the delay from calculation server
+   dbServer.c: made an udp socket for database server and bind it with port 23243, made one more socket for communicating with main Server. After receiving the request from main server, it will search the link in the database. If it does find this link, it will send the detail back to main server. If not, it will reply some information to tell main server that no match found.
+    calcServer.c: made an udp socket for calculation Server and bind it with port 24243, made one more socket to communicate with main server. After receiving the request from main server, it will calculate the transmission delay and propagation delay and send them back to main server.
+    
+5. mainServer:
+      send to database server: "<id>"
+      send to calculation server: "<size> <capacity> <length> <velocity>"
+   databse Server:
+      send to main Server(if found): "<id> <capacity> <length> <velocity>"
+      send to main Server(if not found): "0 0 0 0"
+   calculation server:
+      send to main Server: "<transmission delay> <propagation delay>"
+6. no
+7. from Beej's Guide to Network Programming
+   sendto(): send message with UDP
+   recvfrom(): receive message with UDP
+   getaddrinfo():to get the sockaddr
+   fprintf(), perror():print error message
+   socket(), bind(): build socket and bind it with some port
+   freeaddrinfo(), close(): close connection and release memory
+
+   
+   

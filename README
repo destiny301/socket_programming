@@ -1,7 +1,5 @@
 a. Tianyi Zhang
 
-b. 9598110243
-
 c. In my project, one client can send requests to the main Server with TCP, and the main Server can communicate with database Server and calculation Server to compute the transmission delay and propagation delay with UDP. Finally, the main Server will send the result to the client wth TCP. In addition, there is one monitor which can display all information about the activities of main Server.
 
 d. client.c: the client can send link id and size which are given as command-line argument to main Server with TCP, and can receive the transmission delay and propagation delay from the main Server.
